@@ -1,0 +1,16 @@
+{
+	"books":
+		[
+			{
+				"id":123,
+				"title":"Harry Potter",
+				"author":"JK Rpwling"
+			},
+			{
+				"id":126,
+				"title":"Doraemon",
+				"author":"Fujiko Fujio"
+			}
+		]
+
+}

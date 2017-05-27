@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Express Blog</title>
+	</head>
+	<body>
+		<div>
+			<h1>Homepage</h1>
+		</div>
+		<% blogs.forEach(function(blog) { %>
+				<h3>
+					<a href="/post/<%=blog.id %>">
+						<%=blog.title %>
+					</a>
+				</h3>
+		<% }) %>
+		
+		<div>
+			<a href='/new'>
+				Create new post
+			</a>
+		</div>
+	</body>
+</html>
