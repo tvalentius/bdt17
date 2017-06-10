@@ -9,6 +9,12 @@ const fs = require('fs');
 // Auth
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook');
+// db
+const datastore = require('nedb');
+
+const blogs = new datastore({filename: './db-blogs', autoload: true});
+const products = new datastore({filename: './db-products', autoload: true});
+
 
 let sessionMid = session({
   secret:'keyboard cat',
@@ -74,6 +80,18 @@ app.get('/session',function(req, res) {
   } else {
     res.redirect("/auth/facebook");
   }
+});
+
+app.get('/insert',function(req,res) {
+  blogs.insert([{ title:req.query.title}],function(err) {
+    res.send('data saved');
+  })
+})
+
+app.get('/blog', function(req, res) {
+  blogs.find({}, function(err,docs) {
+    res.send(docs);
+  })
 })
 
 // auth
@@ -94,11 +112,18 @@ io.on('connection', function(socket) {
     let sess = socket.request.session.passport;
     let newMsg = sess.user.displayName + ' : '+msg;
 
+    if(msg == '/blogs') {
+      blogs.find({}, function(err,docs) {
+        io.emit('chat message', JSON.stringify(docs));
+      })
+      return;
+    }
     io.emit('chat message',newMsg);
   });
-
-
 })
+
+// Database CRUD
+
 
 // Run node server
 http.listen(port, function() {
